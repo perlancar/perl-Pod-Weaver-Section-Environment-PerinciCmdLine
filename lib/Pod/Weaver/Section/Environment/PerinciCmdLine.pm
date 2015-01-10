@@ -61,7 +61,7 @@ sub weave_section {
 
 no Moose;
 1;
-# ABSTRACT: Add a COMPLETION section for Perinci::CmdLine-based scripts
+# ABSTRACT: Add an ENVIRONMENT section for Perinci::CmdLine-based scripts
 
 =for Pod::Coverage weave_section
 
@@ -69,14 +69,10 @@ no Moose;
 
 In your C<weaver.ini>:
 
- [Completion::PerinciCmdLine]
+ [Environment::PerinciCmdLine]
 
 
 =head1 DESCRIPTION
-
-This section plugin adds a COMPLETION section for Perinci::CmdLine-based
-scripts. The section contains information on how to activate shell tab
-completion for the scripts.
 
 
 =head1 SEE ALSO
