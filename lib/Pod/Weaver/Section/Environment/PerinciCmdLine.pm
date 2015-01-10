@@ -7,6 +7,7 @@ use 5.010001;
 use Moose;
 with 'Pod::Weaver::Role::AddTextToSection';
 with 'Pod::Weaver::Role::DetectPerinciCmdLineScript';
+with 'Pod::Weaver::Role::DumpPerinciCmdLineScript';
 with 'Pod::Weaver::Role::AddTextToSection';
 with 'Pod::Weaver::Role::Section';
 
@@ -36,12 +37,20 @@ sub weave_section {
     }
     my $cli = $res->[2];
 
-    unless ($cli->{read_env}) {
+    # workaround because currently the dumped object does not contain all
+    # attributes in the hash (Moo/Mo issue?), we need to access the attribute
+    # accessor method first to get them recorded in the hash. this will be fixed
+    # in the dump module in the future.
+    local @INC = ("lib", @INC);
+    eval "use " . ref($cli) . "()";
+    die if $@;
+
+    unless ($cli->read_env) {
         $self->log_debug(["skipped file %s (script does not read env)", $filename]);
         return;
     }
 
-    my $text = $cli->{env_name};
+    my $text = $cli->env_name . "\n\n";
 
     $self->add_text_to_section($document, $text, 'ENVIRONMENT');
 }
